@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wibu gemblung</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: black;
+            overflow: hidden;
+        }
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            animation: explode 1s linear forwards;
+        }
+        .name-text {
+            position: absolute;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            text-align: center;
+            animation: fadeName 2s linear forwards;
+            pointer-events: none; /* Agar teks tidak menghalangi klik */
+        }
+        @keyframes explode {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(10);
+                opacity: 0;
+            }
+        }
+        @keyframes fadeName {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    function createFirework(x, y, showName = true) {
+        // Tambahkan teks nama
+        if (showName) {
+            let nameText = document.createElement("div");
+            nameText.className = "name-text";
+            nameText.textContent = "ahmad fathi wibu gemblung"; // Ganti dengan nama yang diinginkan
+            nameText.style.left = (x - 50) + "px"; // Posisi horizontal
+            nameText.style.top = (y - 20) + "px";  // Posisi vertical
+            document.body.appendChild(nameText);
+            
+            // Hapus elemen nama setelah animasi selesai
+            setTimeout(() => nameText.remove(), 2000);
+        }
+
+        for (let i = 0; i < 30; i++) {
+            let firework = document.createElement("div");
+            firework.className = "firework";
+            document.body.appendChild(firework);
+
+            let angle = Math.random() * 2 * Math.PI;
+            let radius = Math.random() * 100 + 50;
+
+            let newX = x + radius * Math.cos(angle);
+            let newY = y + radius * Math.sin(angle);
+
+            firework.style.left = x + "px";
+            firework.style.top = y + "px";
+            firework.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+
+            firework.animate([
+                { transform: `translate(0, 0)`, opacity: 1 },
+                { transform: `translate(${newX-x}px, ${newY-y}px)`, opacity: 0 }
+            ], {
+                duration: 1000,
+                easing: "ease-out",
+                fill: "forwards"
+            });
+
+            setTimeout(() => firework.remove(), 1000);
+        }
+    }
+
+    document.addEventListener("click", function(e) {
+        createFirework(e.pageX, e.pageY);
+    });
+
+    setInterval(() => {
+        createFirework(Math.random() * window.innerWidth, Math.random() * window.innerHeight, false); // false agar nama tidak muncul di kembang api otomatis
+    }, 1000);
+</script>
+
+</body>
+</html>
